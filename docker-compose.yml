@@ -11,5 +11,5 @@ services:
       - ./raw_chats:/app/raw_chats
       - ./bot.log:/app/bot.log
     environment:
-      - TELEGRAM_TOKEN=<your_bot_token_here>
-      - OPENAI_API_KEY=<your_openai_key_here>
+      TELEGRAM_TOKEN: <your_bot_token_here>
+      OPENAI_API_KEY: <your_openai_api_key_here>

@@ -20,6 +20,8 @@ FILE_CACHE_DIR = "file_cache"
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 os.makedirs(FILE_CACHE_DIR, exist_ok=True)
+with open('prompt.txt', 'r') as file:
+    instructions = file.read()
 
 
 def _get_cached_file_id(chat_id: int) -> str | None:
@@ -75,17 +77,7 @@ def _get_or_create_assistant_id() -> str:
     logger.info("Creating new assistant...")
     assistant = client.beta.assistants.create(
         name="Telegram Chat Analyst",
-        instructions=(
-            "You are an assistant that analyzes a Telegram group chat conversation provided as a plain text file. "
-            "You must answer questions based only on the contents of that file. "
-            "The chat log is formatted as one message per line, in the following structure: "
-            "YYYY-MM-DD Username: Message text "
-            "Each line contains the date, the full name of the message sender, and the message itself. "
-            "There is no additional metadata. "
-            "Be concise and factual. If possible, refer to relevant message dates when giving answers. "
-            "If the information is not found in the log, say that directly. "
-            "Do not guess or assume anything outside of the provided text file."
-        ),
+        instructions=instructions,
         tools=[{"type": "file_search"}],
         model=MODEL,
     )
