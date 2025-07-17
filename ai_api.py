@@ -130,7 +130,7 @@ def analyze_history(chat_id: int, question: str) -> str:
         if not file_id:
             file_path = _chat_file(chat_id)
             if not os.path.exists(file_path):
-                return "⚠️ No chat history found. Use /refresh to upload it."
+                return "⚠️ No chat history found. Import your chat as JSON (full info in readme)."
 
             # Try to upload the file now
             file_obj = client.files.create(
