@@ -5,7 +5,6 @@ services:
     container_name: telegram_chat_analyzer
     restart: unless-stopped
     volumes:
-      - ./chat_data:/app/chat_data
       - ./file_cache:/app/file_cache
       - ./converted_chats:/app/converted_chats
       - ./raw_chats:/app/raw_chats

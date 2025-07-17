@@ -54,14 +54,14 @@ async def typing_loop(bot, chat_id, stop_event):
 async def handle_question(message, question, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat_id = int(str(update.effective_chat.id).removeprefix('-').removeprefix('100'))
 
-    logger.info(f'question received: {message.text}')
+    logger.info(f'(chat: {chat_id}) question received: {message.text}')
     logger.info(f'start analyzing...')
 
     stop_typing = asyncio.Event()
-    typing_task = asyncio.create_task(typing_loop(context.bot, chat_id, stop_typing))
+    typing_task = asyncio.create_task(typing_loop(context.bot, update.effective_chat.id, stop_typing))
 
     try:
-        answer = await asyncio.to_thread(ai_api.analyze_history, update.effective_chat.id, question)
+        answer = await asyncio.to_thread(ai_api.analyze_history, chat_id, question)
     finally:
         stop_typing.set()
         await typing_task

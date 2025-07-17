@@ -20,7 +20,7 @@ FILE_CACHE_DIR = "file_cache"
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 os.makedirs(FILE_CACHE_DIR, exist_ok=True)
-with open('prompt.txt', 'r') as file:
+with open('prompt.txt', 'r', encoding='utf-8') as file:
     instructions = file.read()
 
 
