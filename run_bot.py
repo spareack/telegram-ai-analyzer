@@ -34,7 +34,7 @@ async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 async def cmd_refresh(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    chat_id = abs(update.effective_chat.id)
+    chat_id = int(str(update.effective_chat.id).removeprefix('-').removeprefix('100'))
     result = ai_api.refresh_chat_file(chat_id)
     await update.message.reply_text(result)
 
@@ -52,22 +52,22 @@ async def typing_loop(bot, chat_id, stop_event):
 
 
 async def handle_question(message, question, update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    abs_chat_id = abs(update.effective_chat.id)
+    chat_id = int(str(update.effective_chat.id).removeprefix('-').removeprefix('100'))
 
     logger.info(f'question received: {message.text}')
     logger.info(f'start analyzing...')
 
     stop_typing = asyncio.Event()
-    typing_task = asyncio.create_task(typing_loop(context.bot, update.effective_chat.id, stop_typing))
+    typing_task = asyncio.create_task(typing_loop(context.bot, chat_id, stop_typing))
 
     try:
-        answer = await asyncio.to_thread(ai_api.analyze_history, abs_chat_id, question)
+        answer = await asyncio.to_thread(ai_api.analyze_history, chat_id, question)
     finally:
         stop_typing.set()
         await typing_task
 
     ai_api.append_message(
-        chat_id=abs_chat_id,
+        chat_id=chat_id,
         user_name=message.from_user.full_name,
         text=message.text,
         date=message.date,
